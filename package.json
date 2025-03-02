@@ -1,0 +1,44 @@
+{
+  "name": "my-express-app",
+  "version": "1.0.0",
+  "description": "A simple Express app",
+  "main": "server.js",
+  "dependencies": {
+    "googleapis": "^146.0.0",
+    "express": "^4.21.2",
+    "sqlite3": "^5.1.7",
+    "multer": "^1.4.4",
+    "body-parser": "^2.1.0",
+    "open": "^10.1.0"
+  },
+  "engines": {
+    "node": "14.x"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "ISC"
+}
+{
+  "name": "my-express-app",
+  "version": "1.0.0",
+  "description": "A simple Express app",
+  "main": "server.js",
+  "dependencies": {
+    "googleapis": "^146.0.0",
+    "express": "^4.21.2",
+    "sqlite3": "^5.1.7",
+    "multer": "^1.4.4",
+    "body-parser": "^2.1.0",
+    "open": "^10.1.0"
+  },
+  "engines": {
+    "node": "14.x"
+  },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "",
+  "license": "ISC"
+}
