@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registo de Veículos</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+        }
+        input, button {
+            display: block;
+            width: 100%;
+            margin: 10px 0;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Registar Veículo</h2>
+    <form id="vehicleForm">
+        <input type="text" id="marca" placeholder="Marca" required>
+        <input type="text" id="modelo" placeholder="Modelo" required>
+        <input type="text" id="matricula" placeholder="Matrícula" required>
+        <input type="url" id="foto" placeholder="Link da Foto (Google Drive)" required>
+        <button type="submit">Registar</button>
+    </form>
+    
+    <h2>Pesquisa</h2>
+    <input type="text" id="pesquisa" placeholder="Procurar por matrícula...">
+    <ul id="listaVeiculos"></ul>
+    
+    <script>
+        const supabaseUrl = "https://czefwegncrjrcdnqvhty.supabase.co";
+        const supabaseKey = "eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN6ZWZ3ZWduY3JqcmNkbnF2aHR5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDA5MjYwMjksImV4cCI6MjA1NjUwMjAyOX0";
+        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+        
+        async function carregarVeiculos(filtro = '') {
+            const { data, error } = await supabase
+                .from('veiculos')
+                .select('*')
+                .like('matricula', `%${filtro}%`);
+            if (error) console.error(error);
+            atualizarLista(data || []);
+        }
+        
+        async function registarVeiculo(marca, modelo, matricula, foto) {
+            const { error } = await supabase.from('veiculos').insert([{ marca, modelo, matricula, foto }]);
+            if (error) console.error(error);
+            carregarVeiculos();
+        }
+        
+        function atualizarLista(veiculos) {
+            const lista = document.getElementById('listaVeiculos');
+            lista.innerHTML = '';
+            veiculos.forEach(v => {
+                const li = document.createElement('li');
+                li.innerHTML = `<strong>${v.marca} ${v.modelo}</strong> - ${v.matricula}<br><img src="${v.foto}" width="100">`;
+                lista.appendChild(li);
+            });
+        }
+        
+        document.getElementById('vehicleForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const marca = document.getElementById('marca').value;
+            const modelo = document.getElementById('modelo').value;
+            const matricula = document.getElementById('matricula').value;
+            const foto = document.getElementById('foto').value;
+            await registarVeiculo(marca, modelo, matricula, foto);
+            this.reset();
+        });
+        
+        document.getElementById('pesquisa').addEventListener('input', function() {
+            carregarVeiculos(this.value);
+        });
+        
+        carregarVeiculos();
+    </script>
+</body>
+</html>
